@@ -1,0 +1,29 @@
+sudo: false
+language: python
+
+python:
+  - "2.7"
+  - '3.5'
+
+install:
+  - pip install tox-travis
+  - pip install python-coveralls
+
+script:
+  - tox
+
+after_success:
+  - coveralls
+
+deploy:
+  provider: pypi
+  user: free.ekanayaka
+  password:
+    secure: C1fH6R8Zql0/TcqNihRkO81pt7iNCTAafOtHWId6xi1eS34ymVoqh2GuqsAaJTk+xlIp2bePJR98M8bj5OwBbHilWpBYeTy10T5vVUcao4trbqaylL7nXMbJWl4I011reWkM3fISYX2mhevhf0g3KRMckEkCCcsTKIl2qrzwm1YTuHJBvfzJzVWj7ZeNVyawwRKRfs2KTH25JS4uf6Q4mYGS0nrs04VlHdtqwx0NqjOGgbYTylvl6omBtyJ8Z7VIDPl7whj+HCb0wAOUGvCLiTvSqZUpIlEeo6qF299xf8P7pXmo+29M6Moe03GNtFdBoskesezmwf5oT7CiSzTEjbOrVfHCqcD/00SRs2qH2ex8uJcb3vcj+i4qOMnhhcLCKTY7sFYeRoabwDp28SqY4FtEN+4mveUUdtO246hWC9n99wNJTODdfJG/TPmJ58h5HWepP8muG8Zqv94B177rSfkx4BlSCOY6lcFl/Su7DJ1TwsQXgvT2DaCNCL5LsI/HP5UppE/CJOGbrYTHttmm596XD9VDlTxe0Q8rjOKFKOGXyB9hu94SBsTHuyOIsjt38PlsQC+NAbjoxroRE+J/wdP+OsxLSJguCXoW0fhjdJq0WxhrFSYQJeMUW/CpKFgEAez/B02INVmjm/3PGSOb0R4Bn70cFoPQCl1RZteYOQw=
+  docs_dir: .tox/docs35/tmp/doctest
+  upload_docs: true
+  on:
+    tags: true
+    condition: $TRAVIS_PYTHON_VERSION = "3.5"
+    distributions: "sdist bdist_wheel"
+    repo: freeekanayaka/systemfixtures
