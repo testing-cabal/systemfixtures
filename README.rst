@@ -1,6 +1,5 @@
-=====================================================
-Test fixtures for faking out various system resources
-=====================================================
+System fixtures
+===============
 
 .. image:: https://img.shields.io/pypi/v/systemfixtures.svg
     :target: https://pypi.python.org/pypi/systemfixtures
@@ -14,11 +13,14 @@ Test fixtures for faking out various system resources
     :target: https://coveralls.io/github/freeekanayaka/charm-test?branch=master
     :alt: Coverage
 
-Example
--------
+A collection of Python fixtures_ to fake out  various system resources (processes,
+users, groups, etc.).
 
-Please see the `full documentation <http://pythonhosted.org/systemfixtures/>`_ for
-more information.
+.. _fixtures: https://github.com/testing-cabal/fixtures
+
+Each fake resource typically behaves as an "overlay" on the real resource, in
+that it can be programmed with fake behavior for a set of inputs, but falls
+back to the real behavior for the rest.
 
 .. code:: python
 
@@ -39,3 +41,14 @@ more information.
    >>> info.pw_uid
    123
    >>> users.cleanUp()
+
+Support and Documentation
+-------------------------
+
+See the `online documentation <http://pythonhosted.org/systemfixtures/>`_ for
+a complete reference.
+
+Developing and Contributing
+---------------------------
+
+See the `GitHub project <https://github.com/freeekanayaka/systemfixtures>`_.

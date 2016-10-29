@@ -19,7 +19,7 @@ that it can be programmed with fake behavior for a set of inputs, but falls
 back to the real behavior for the rest. See the examples below for more
 information.
 
-The implementation is mostly built upon the basic MonkeyPatch_ fixture.
+The implementation is mostly built on top of the basic MonkeyPatch_ fixture.
 
 .. _MonkeyPatch: https://github.com/testing-cabal/fixtures/blob/master/fixtures/_fixtures/monkeypatch.py
 
