@@ -2,7 +2,7 @@ import os
 import six
 import shutil
 
-from testtools import TestCase
+from testtools import TestCase, skipIf
 from testtools.matchers import (
     DirExists,
     HasPermissions,
@@ -45,6 +45,7 @@ class FakeFilesystemTest(TestCase):
             os.fchown(fd.fileno(), 123, 456)
         self.assertThat("/foo/bar", HasOwnership(123, 456))
 
+    @skipIf(os.getuid() == 0, "Can't run as root")
     def test_fchown_real(self):
         temp_dir = self.useFixture(TempDir())
         path = temp_dir.join("foo")
@@ -58,6 +59,7 @@ class FakeFilesystemTest(TestCase):
         os.chown("/foo/bar", 123, 456)
         self.assertThat("/foo/bar", HasOwnership(123, 456))
 
+    @skipIf(os.getuid() == 0, "Can't run as root")
     def test_chown_real(self):
         temp_dir = self.useFixture(TempDir())
         path = temp_dir.join("foo")
