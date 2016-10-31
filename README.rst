@@ -51,4 +51,5 @@ a complete reference.
 Developing and Contributing
 ---------------------------
 
-See the `GitHub project <https://github.com/freeekanayaka/systemfixtures>`_.
+See the `GitHub project <https://github.com/freeekanayaka/systemfixtures>`_. Bugs
+can be filed in the issues tracker.
