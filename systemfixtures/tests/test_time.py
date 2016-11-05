@@ -21,3 +21,7 @@ class FakeTimeTest(TestCase):
         time.sleep(1)
         stamp2 = time.time()
         self.assertEqual(1, stamp2 - stamp1)
+
+    def test_reset(self):
+        self.time.set(123)
+        self.assertEqual(123, time.time())
