@@ -311,3 +311,44 @@ dpkg
   >>> processes.cleanUp()
 
 
+
+Threads
++++++++
+
+The :class:`FakeThreads` fixture lets you fake out threads spawed with the
+:class:`threading` module, and partially simulate their behavior in a
+synchronous way:
+
+.. doctest::
+
+   >>> import threading
+
+   >>> from systemfixtures import FakeThreads
+
+   >>> threads = FakeThreads()
+   >>> threads.setUp()
+
+   >>> calls = [None]
+   >>> thread = threading.Thread(target=calls.pop)
+   >>> thread.name
+   'fake-thread-0'
+
+   >>> thread.start()
+   >>> calls
+   []
+   >>> thread.join()
+   >>> thread.isAlive()
+   False
+
+It's also possible to simulate a hung thread:
+
+   >>> threads.hang()
+
+   >>> thread = threading.Thread()
+   >>> thread.name
+   'fake-thread-1'
+
+   >>> thread.start()
+   >>> thread.join(timeout=60)  # This returns immediately
+   >>> thread.isAlive()
+   True

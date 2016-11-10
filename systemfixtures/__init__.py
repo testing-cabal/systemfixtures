@@ -8,6 +8,7 @@ from .filesystem import FakeFilesystem
 from .processes import FakeProcesses
 from .network import FakeNetwork
 from .time import FakeTime
+from .threads import FakeThreads
 
 
 __all__ = [
@@ -17,6 +18,7 @@ __all__ = [
     "FakeProcesses",
     "FakeNetwork",
     "FakeTime",
+    "FakeThreads",
 ]
 
 
