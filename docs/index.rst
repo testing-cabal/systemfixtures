@@ -352,3 +352,26 @@ It's also possible to simulate a hung thread:
    >>> thread.join(timeout=60)  # This returns immediately
    >>> thread.isAlive()
    True
+
+
+Executables
++++++++++++
+
+The :class:`FakeExecutable` fixture lets you create temporary Python scripts
+that can be configured to mimic the behavior of some real executable (for
+instance listening to a port or emitting certain output):
+
+.. doctest::
+
+   >>> import stat
+   >>> from systemfixtures import FakeExecutable
+
+   >>> executable = FakeExecutable()
+   >>> executable.setUp()
+
+   >>> bool(os.stat(executable.path).st_mode & stat.S_IXUSR)
+   True
+
+   >>> executable.out('hello')
+   >>> subprocess.check_output([executable.path])
+   b'hello\n'

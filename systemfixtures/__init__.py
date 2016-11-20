@@ -9,6 +9,7 @@ from .processes import FakeProcesses
 from .network import FakeNetwork
 from .time import FakeTime
 from .threads import FakeThreads
+from .executable import FakeExecutable
 
 
 __all__ = [
@@ -19,6 +20,7 @@ __all__ = [
     "FakeNetwork",
     "FakeTime",
     "FakeThreads",
+    "FakeExecutable",
 ]
 
 
