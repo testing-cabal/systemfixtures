@@ -32,8 +32,7 @@ class FakeExecutable(Fixture):
         """Spawn the fake executable using subprocess.Popen."""
         self._process = subprocess.Popen(
             [self.path], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        self.addCleanup(self._process.wait, timeout=5)
-        self.addCleanup(self._process.kill)
+        self.addCleanup(self._process_kill)
 
     def out(self, text):
         self.line("import sys")
@@ -77,6 +76,12 @@ class FakeExecutable(Fixture):
     def line(self, line):
         with open(self.path, "a") as fd:
             fd.write("{}\n".format(line))
+
+    def _process_kill(self):
+        """Kill the fake executable process if it's still running."""
+        if self._process.poll() is None:  # pragma: no cover
+            self._process.kill()
+            self._process.wait(timeout=5)
 
     def _process_info(self):
         """Return details about the fake process."""

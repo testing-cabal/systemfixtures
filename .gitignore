@@ -1,5 +1,4 @@
 .coverage
-.testrepository
 __pycache__
 *.pyc
 dist
@@ -7,4 +6,4 @@ systemfixtures.egg-info
 ChangeLog
 AUTHORS
 .tox
-docs/_build
+doc/_build
