@@ -1,4 +1,6 @@
 import os
+import time
+import errno
 import socket
 import subprocess
 
@@ -34,16 +36,22 @@ class FakeExecutableTest(TestCase):
 
     def test_listen(self):
         self.executable.listen(6666)
-        self.executable.out("hello")
-        process = subprocess.Popen(
-            [self.executable.path], stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT)
-        self.addCleanup(process.wait)
-        self.addCleanup(process.kill)
-        # This ensures that the port will be open
-        self.assertEqual(b"hello\n", process.stdout.read(6))
+        self.executable.sleep(1)
+        self.executable.spawn()
+
+        # Try to connect to the socket
         sock = socket.socket()
-        sock.connect(("127.0.0.1", self.executable.port))
+        transient = (errno.ECONNREFUSED, errno.ECONNRESET)
+
+        for i in range(5):
+            try:
+                sock.connect(("127.0.0.1", self.executable.port))
+            except socket.error as error:  # pragma: no cover
+                if error.errno in transient and i != 4:
+                    time.sleep(0.01 * i)
+                    continue
+                raise error
+            break
         self.assertEqual("127.0.0.1", sock.getsockname()[0])
 
     def test_hang(self):

@@ -4,3 +4,4 @@ fixtures
 testtools
 requests-mock
 fakesleep
+subprocess32; python_version < '3.5'

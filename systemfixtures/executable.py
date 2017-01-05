@@ -1,14 +1,20 @@
 import os
 import socket
 
+import six
+
+from testtools.content import Content
+from testtools.content_type import UTF8_TEXT
+
 from fixtures import (
     Fixture,
     TempDir,
 )
 
-
-SUBSTITUTIONS = {
-}
+if six.PY2:
+    import subprocess32 as subprocess
+if six.PY3:
+    import subprocess
 
 
 class FakeExecutable(Fixture):
@@ -18,6 +24,16 @@ class FakeExecutable(Fixture):
         self.path = self.useFixture(TempDir()).join("executable")
         self.line("#!/usr/bin/env python")
         os.chmod(self.path, 0o0755)
+
+        self._process = None
+        self.addDetail("fake-process", Content(UTF8_TEXT, self._process_info))
+
+    def spawn(self):
+        """Spawn the fake executable using subprocess.Popen."""
+        self._process = subprocess.Popen(
+            [self.path], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        self.addCleanup(self._process.wait, timeout=5)
+        self.addCleanup(self._process.kill)
 
     def out(self, text):
         self.line("import sys")
@@ -35,17 +51,47 @@ class FakeExecutable(Fixture):
         self.line("while True: time.sleep(1)")
 
     def listen(self, port=None):
+        """Make the fake executable listen to the specified port.
+
+        Possible values for 'port' are:
+
+        - None: Allocate immediately a free port and instruct the fake
+          executable to use it when it's invoked. This is subject to
+          a race condition, if that port that was free when listen() was
+          invoked later becomes used before the fake executable had chance
+          to bind to it. However it has the advantage of exposing the
+          free port as FakeExecutable.port instance variable, that can easily
+          be consumed by tests.
+
+        - An integer: Listen to this specific port.
+        """
         if port is None:
             port = allocate_port()
         self.port = port
         self.line("import socket")
         self.line("sock = socket.socket()")
         self.line("sock.bind(('localhost', {}))".format(self.port))
+        self.line("print('listening: %d')" % self.port)
         self.line("sock.listen(0)")
 
     def line(self, line):
         with open(self.path, "a") as fd:
             fd.write("{}\n".format(line))
+
+    def _process_info(self):
+        """Return details about the fake process."""
+        if not self._process:
+            return []
+
+        output, error = self._process.communicate(timeout=5)
+        if error is None:
+            error = b""
+        output = output.decode("utf-8").strip()
+        error = error.decode("utf-8").strip()
+        info = (u"returncode: %r\n"
+                u"output:\n%s\n"
+                u"error:\n%s\n" % (self._process.returncode, output, error))
+        return [info.encode("utf-8")]
 
 
 def get_port(socket):
