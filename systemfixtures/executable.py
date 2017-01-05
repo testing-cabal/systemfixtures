@@ -47,7 +47,7 @@ class FakeExecutable(Fixture):
         self.line("import time")
         self.line("import signal")
         self.line("signal.signal(signal.SIGTERM, lambda *args: None)")
-        self.line("print('hanging')")
+        self.out("hanging")
         self.line("while True: time.sleep(1)")
 
     def listen(self, port=None):
@@ -71,7 +71,7 @@ class FakeExecutable(Fixture):
         self.line("import socket")
         self.line("sock = socket.socket()")
         self.line("sock.bind(('localhost', {}))".format(self.port))
-        self.line("print('listening: %d')" % self.port)
+        self.out("listening: %d" % self.port)
         self.line("sock.listen(0)")
 
     def line(self, line):
