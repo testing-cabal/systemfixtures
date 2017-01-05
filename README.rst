@@ -9,9 +9,13 @@ System fixtures
     :target: https://travis-ci.org/freeekanayaka/systemfixtures
     :alt: Build Status
 
-.. image:: https://coveralls.io/repos/github/freeekanayaka/charm-test/badge.svg?branch=master
-    :target: https://coveralls.io/github/freeekanayaka/charm-test?branch=master
+.. image:: https://coveralls.io/repos/github/freeekanayaka/systemfixtures/badge.svg?branch=master
+    :target: https://coveralls.io/github/freeekanayaka/systemfixtures?branch=master
     :alt: Coverage
+
+.. image:: https://readthedocs.org/projects/systemfixtures/badge/?version=latest
+    :target: http://systemfixtures.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
 
 A collection of Python fixtures_ to fake out  various system resources (processes,
 users, groups, etc.).
@@ -45,7 +49,7 @@ back to the real behavior for the rest.
 Support and Documentation
 -------------------------
 
-See the `online documentation <http://pythonhosted.org/systemfixtures/>`_ for
+See the `online documentation <http://systemfixtures.readthedocs.io/>`_ for
 a complete reference.
 
 Developing and Contributing
