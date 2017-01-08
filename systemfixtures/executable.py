@@ -23,6 +23,9 @@ class FakeExecutable(Fixture):
     def _setUp(self):
         self.path = self.useFixture(TempDir()).join("executable")
         self.line("#!/usr/bin/env python")
+        self.line("import logging")
+        self.line("logging.basicConfig("
+                      "format='%(asctime)s %(message)s', level=logging.DEBUG)")
         os.chmod(self.path, 0o0755)
 
         self._process = None
@@ -38,6 +41,9 @@ class FakeExecutable(Fixture):
         self.line("import sys")
         self.line("sys.stdout.write('{}\\n')".format(text))
         self.line("sys.stdout.flush()")
+
+    def log(self, message):
+        self.line("logging.info('{}')".format(message))
 
     def sleep(self, seconds):
         self.line("import time")
@@ -71,7 +77,7 @@ class FakeExecutable(Fixture):
         self.line("import socket")
         self.line("sock = socket.socket()")
         self.line("sock.bind(('localhost', {}))".format(self.port))
-        self.out("listening: %d" % self.port)
+        self.log("listening: %d" % self.port)
         self.line("sock.listen(0)")
 
     def line(self, line):

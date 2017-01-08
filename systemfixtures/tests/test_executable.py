@@ -2,9 +2,13 @@ import os
 import time
 import errno
 import socket
+import logging
 import subprocess
 
+from fixtures import FakeLogger
+
 from testtools import TestCase
+from testtools.content import text_content
 from testtools.matchers import (
     Contains,
     FileContains,
@@ -35,6 +39,7 @@ class FakeExecutableTest(TestCase):
         self.assertIsNotNone(self.executable.port)
 
     def test_listen(self):
+        logger = self.useFixture(FakeLogger(format="%(asctime)s %(message)s"))
         self.executable.listen(6666)
         self.executable.sleep(1)
         self.executable.spawn()
@@ -43,13 +48,15 @@ class FakeExecutableTest(TestCase):
         sock = socket.socket()
         transient = (errno.ECONNREFUSED, errno.ECONNRESET)
 
-        for i in range(5):
+        attempts = 10
+        for i in range(1, attempts + 1):
             try:
                 sock.connect(("127.0.0.1", self.executable.port))
             except socket.error as error:  # pragma: no cover
-                if error.errno in transient and i != 4:
-                    time.sleep(0.01 * i)
+                if error.errno in transient and i != attempts:
+                    time.sleep(0.05 * i)
                     continue
+                logging.error("connection attempt %d failed", i)
                 raise error
             break
         self.assertEqual("127.0.0.1", sock.getsockname()[0])
