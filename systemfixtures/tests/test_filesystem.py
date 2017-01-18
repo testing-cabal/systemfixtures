@@ -116,3 +116,9 @@ class FakeFilesystemTest(TestCase):
         os.mkdir("/foo")
         os.symlink("/foo/bar", "/foo/egg")
         self.assertEqual("/foo/bar", os.readlink("/foo/egg"))
+
+    def test_rename(self):
+        self.fs.add("/foo")
+        os.makedirs("/foo/bar")
+        os.rename("/foo/bar", "/foo/egg")
+        self.assertThat("/foo/egg", DirExists())

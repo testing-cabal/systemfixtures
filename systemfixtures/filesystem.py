@@ -57,6 +57,7 @@ class FakeFilesystem(Fixture):
             "os.symlink", self._symlink, self._is_fake_symlink))
         self.useFixture(
             Overlay("os.readlink", self._readlink, self._is_fake_path))
+        self.useFixture(Overlay("os.rename", self._rename, lambda *args: True))
 
     def add(self, path):
         """Add a path to the overlay filesytem.
@@ -108,6 +109,13 @@ class FakeFilesystem(Fixture):
         if result.startswith(self.root.path):
             result = self._fake_path(result)
         return result
+
+    def _rename(self, real, src, dst):
+        if self._is_fake_path(src):
+            src = self._real_path(src)
+        if self._is_fake_path(dst):
+            dst = self._real_path(dst)
+        return real(src, dst)
 
     def _generic(self, real, path, *args, **kwargs):
         return real(self._real_path(path), *args, **kwargs)
