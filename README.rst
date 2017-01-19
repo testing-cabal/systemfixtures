@@ -5,12 +5,12 @@ System fixtures
     :target: https://pypi.python.org/pypi/systemfixtures
     :alt: Latest Version
 
-.. image:: https://travis-ci.org/freeekanayaka/systemfixtures.svg?branch=master
-    :target: https://travis-ci.org/freeekanayaka/systemfixtures
+.. image:: https://travis-ci.org/testing-cabal/systemfixtures.svg?branch=master
+    :target: https://travis-ci.org/testing-cabal/systemfixtures
     :alt: Build Status
 
-.. image:: https://coveralls.io/repos/github/freeekanayaka/systemfixtures/badge.svg?branch=master
-    :target: https://coveralls.io/github/freeekanayaka/systemfixtures?branch=master
+.. image:: https://coveralls.io/repos/github/testing-cabal/systemfixtures/badge.svg?branch=master
+    :target: https://coveralls.io/github/testing-cabal/systemfixtures?branch=master
     :alt: Coverage
 
 .. image:: https://readthedocs.org/projects/systemfixtures/badge/?version=latest
@@ -55,5 +55,5 @@ a complete reference.
 Developing and Contributing
 ---------------------------
 
-See the `GitHub project <https://github.com/freeekanayaka/systemfixtures>`_. Bugs
+See the `GitHub project <https://github.com/testing-cabal/systemfixtures>`_. Bugs
 can be filed in the issues tracker.
