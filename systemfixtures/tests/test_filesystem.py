@@ -1,4 +1,6 @@
+import glob
 import os
+import sqlite3
 import six
 import shutil
 
@@ -122,3 +124,26 @@ class FakeFilesystemTest(TestCase):
         os.makedirs("/foo/bar")
         os.rename("/foo/bar", "/foo/egg")
         self.assertThat("/foo/egg", DirExists())
+
+    def test_glob(self):
+        self.fs.add("/foo")
+        os.makedirs("/foo/bar")
+        os.makedirs("/foo/baz")
+        self.assertEqual(
+            [os.path.join(self.fs.root.path, "foo/bar"),
+             os.path.join(self.fs.root.path, "foo/baz")],
+            sorted(glob.glob("/foo/ba*")))
+
+    def test_walk(self):
+        self.fs.add("/foo")
+        os.makedirs("/foo/bar")
+        self.assertEqual(
+            [(os.path.join(self.fs.root.path, "foo/bar"), [], [])],
+            list(os.walk("/foo/bar")))
+
+    def test_sqlite3(self):
+        self.fs.add("/foo")
+        os.makedirs("/foo/bar")
+        conn = sqlite3.connect("/foo/bar/db")
+        self.addCleanup(conn.close)
+        self.assertIsNotNone(conn)

@@ -16,15 +16,18 @@ if six.PY3:
 
 GENERIC_APIS = (
     BUILTIN_OPEN,
+    "glob.glob",
     "os.mkdir",
     "os.rmdir",
     "os.chmod",
     "os.remove",
     "os.unlink",
     "os.listdir",
+    "os.walk",
     "os.open",
     "os.path.exists",
     "os.path.isdir",
+    "sqlite3.connect",
 )
 
 
