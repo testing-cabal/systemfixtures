@@ -6,14 +6,28 @@ from fixtures._fixtures import popen
 
 
 class FakeProcesses(FakePopen):
-    """Enhances FakePopen by supporting multiple processes."""
+    """Enhances FakePopen by supporting multiple processes.
+
+    This is essentially a registry to dispatch calls to FakePopen to
+    fake code associated with an executable name, or to fall back to
+    real executables in a matching name is not registered.
+    """
 
     def __init__(self):
         self._registry = {}
         self._real_Popen = subprocess.Popen
 
     def add(self, process, name=None):
+        """Add a new process to the registry.
+
+        :param process: A callable (either plain function or object
+            implementing __calll).
+        :param name: The name of the executable to match. If not given
+            it must be provided as 'name' attribute of the given `process`.
+            callable.
+        """
         name = name or process.name
+        assert name, "No executable name given."""
         self._registry[name] = process
 
     def get_info(self, proc_args):
