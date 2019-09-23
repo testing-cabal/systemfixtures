@@ -14,11 +14,11 @@ class WgetTest(TestCase):
         self.wget = Wget(locations=self.locations)
 
     def test_to_stdout(self):
-        result = self.wget({"args": ["wget", "-O", "-", "http://x"]})
+        result = self.wget({"args": ["wget","-N", "-O", "-", "http://x"]})
         self.assertEqual(b"data", result["stdout"].getvalue())
 
     def test_to_file(self):
         temp_dir = self.useFixture(TempDir())
         path = temp_dir.join("output")
-        self.wget({"args": ["wget", "-O", path, "http://x"]})
+        self.wget({"args": ["wget", "-N", "-O", path, "http://x"]})
         self.assertThat(path, FileContains("data"))
