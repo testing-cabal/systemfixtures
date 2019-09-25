@@ -1,4 +1,5 @@
 import io
+import os
 import argparse
 
 
@@ -6,8 +7,9 @@ class Wget(object):
 
     name = "wget"
 
-    def __init__(self, locations=None):
+    def __init__(self, locations=None, cwd=None):
         self.locations = locations or {}
+        self.cwd = cwd or ""
 
     def __call__(self, proc_args):
         parser = argparse.ArgumentParser()
@@ -18,10 +20,16 @@ class Wget(object):
         parser.add_argument("--no-check-certificate", action="store_true")
         args = parser.parse_args(proc_args["args"][1:])
         content = self.locations[args.url]
+        file = args.url.split("/")[-1]
+        file_dir = os.path.join(self.cwd, file)
         result = {}
         if args.output == "-":
             result["stdout"] = io.BytesIO(content)
+        elif (args.output is None):
+            with open(file_dir, "wb") as fd:
+                fd.write(content)
         else:
             with open(args.output, "wb") as fd:
                 fd.write(content)
+
         return result
