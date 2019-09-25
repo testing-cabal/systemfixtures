@@ -21,7 +21,7 @@ class Wget(object):
         result = {}
         if args.output == "-":
             result["stdout"] = io.BytesIO(content)
-        else:
+        elif (args.output is not None):
             with open(args.output, "wb") as fd:
                 fd.write(content)
         return result
