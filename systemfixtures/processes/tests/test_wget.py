@@ -4,7 +4,6 @@ from testtools.matchers import FileContains
 from fixtures import TempDir
 
 from ..wget import Wget
-import os
 
 
 class WgetTest(TestCase):
@@ -25,5 +24,9 @@ class WgetTest(TestCase):
         self.assertThat(path, FileContains("data"))
 
     def test_to_default(self):
-        self.wget({"args": ["wget", "-N", "http://x"]})
-        self.assertThat("x", FileContains("data"))
+        temp_dir = self.useFixture(TempDir())
+        path = temp_dir.join("")
+        file_path = temp_dir.join("x")
+        print("rootdir: {}".format(path))
+        self.wget({"args": ["wget", "-N", "http://x"]}, cwd=path)
+        self.assertThat(file_path, FileContains("data"))

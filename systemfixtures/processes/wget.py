@@ -7,11 +7,11 @@ class Wget(object):
 
     name = "wget"
 
-    def __init__(self, locations=None, cwd=None):
+    def __init__(self, locations=None):
         self.locations = locations or {}
-        self.cwd = cwd or ""
 
-    def __call__(self, proc_args):
+    def __call__(self, proc_args, cwd=None):
+        cwd = cwd or ""
         parser = argparse.ArgumentParser()
         parser.add_argument("url")
         parser.add_argument("-O", dest="output")
@@ -21,7 +21,7 @@ class Wget(object):
         args = parser.parse_args(proc_args["args"][1:])
         content = self.locations[args.url]
         file = args.url.split("/")[-1]
-        file_dir = os.path.join(self.cwd, file)
+        file_dir = os.path.join(cwd, file)
         result = {}
         if args.output == "-":
             result["stdout"] = io.BytesIO(content)
