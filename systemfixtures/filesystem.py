@@ -27,6 +27,7 @@ GENERIC_APIS = (
     "os.open",
     "os.path.exists",
     "os.path.isdir",
+    "os.utime",
     "sqlite3.connect",
 )
 
