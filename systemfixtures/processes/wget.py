@@ -10,8 +10,8 @@ class Wget(object):
     def __init__(self, locations=None):
         self.locations = locations or {}
 
-    def __call__(self, proc_args, cwd=None):
-        cwd = cwd or ""
+    def __call__(self, proc_args):
+        cwd = proc_args.get("cwd") or ""
         parser = argparse.ArgumentParser()
         parser.add_argument("url")
         parser.add_argument("-O", dest="output")
