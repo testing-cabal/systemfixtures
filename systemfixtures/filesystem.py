@@ -139,6 +139,8 @@ class FakeFilesystem(Fixture):
         def _is_fake_path_or_fd(self, path, *args, **kwargs):
             if isinstance(path, int):
                 path = self._path_from_fd(path)
+            elif isinstance(path, os.DirEntry):
+                path = path.name
             return self._is_fake_path(path)
 
     def _is_fake_symlink(self, src, dst, *args, **kwargs):
