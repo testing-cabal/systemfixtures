@@ -97,6 +97,12 @@ class FakeFilesystemTest(TestCase):
         shutil.rmtree("/foo/bar")
         self.assertEqual([], os.listdir("/foo"))
 
+    def test_copytree(self):
+        self.fs.add("/foo")
+        shutil.copytree("./doc", "/foo")
+        self.assertEqual(
+            sorted(os.listdir("./doc")), sorted(os.listdir("/foo")))
+
     if six.PY3:
 
         def test_listdir_with_fd(self):
