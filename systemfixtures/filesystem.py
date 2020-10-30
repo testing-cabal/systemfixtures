@@ -12,6 +12,15 @@ if six.PY2:
     BUILTIN_OPEN = "__builtin__.open"
 if six.PY3:
     BUILTIN_OPEN = "builtins.open"
+    # https://bugs.python.org/issue28530
+    try:  # pragma: no cover
+        from os import DirEntry
+    except ImportError:  # pragma: no cover
+        import tempfile
+        with tempfile.NamedTemporaryFile() as ftemp:
+            scan = os.scandir(os.path.dirname(ftemp.name))
+            DirEntry = type(next(scan))
+        del scan, ftemp, tempfile
 
 
 GENERIC_APIS = (
@@ -139,7 +148,7 @@ class FakeFilesystem(Fixture):
         def _is_fake_path_or_fd(self, path, *args, **kwargs):
             if isinstance(path, int):
                 path = self._path_from_fd(path)
-            elif isinstance(path, os.DirEntry):
+            elif isinstance(path, DirEntry):  # pragma: no cover
                 path = path.name
             return self._is_fake_path(path)
 
