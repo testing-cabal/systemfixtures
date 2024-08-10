@@ -1,5 +1,5 @@
 import os
-import six
+from os import DirEntry
 
 from fixtures import (
     Fixture,
@@ -8,15 +8,8 @@ from fixtures import (
 
 from ._overlay import Overlay
 
-if six.PY2:
-    BUILTIN_OPEN = "__builtin__.open"
-if six.PY3:
-    BUILTIN_OPEN = "builtins.open"
-    from os import DirEntry
-
-
 GENERIC_APIS = (
-    BUILTIN_OPEN,
+    "builtins.open",
     "glob.glob",
     "os.mkdir",
     "os.rmdir",
@@ -45,11 +38,7 @@ class FakeFilesystem(Fixture):
         self._paths = {}
         self._ownership = {}
 
-        if six.PY2:
-            # Python 2 doesn't support a fd argument
-            condition = self._is_fake_path
-        if six.PY3:
-            condition = self._is_fake_path_or_fd
+        condition = self._is_fake_path_or_fd
 
         for api in GENERIC_APIS:
             self.useFixture(Overlay(api, self._generic, condition))
@@ -135,14 +124,12 @@ class FakeFilesystem(Fixture):
         path = self._path_from_fd(fileno)
         return path.startswith(self.root.path)
 
-    if six.PY3:
-
-        def _is_fake_path_or_fd(self, path, *args, **kwargs):
-            if isinstance(path, int):
-                path = self._path_from_fd(path)
-            elif isinstance(path, DirEntry):
-                path = path.name
-            return self._is_fake_path(path)
+    def _is_fake_path_or_fd(self, path, *args, **kwargs):
+        if isinstance(path, int):
+            path = self._path_from_fd(path)
+        elif isinstance(path, DirEntry):
+            path = path.name
+        return self._is_fake_path(path)
 
     def _is_fake_symlink(self, src, dst, *args, **kwargs):
         return self._is_fake_path(src) or self._is_fake_path(dst)

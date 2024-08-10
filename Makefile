@@ -18,10 +18,9 @@ check:
 check-doc:
 	SPHINXBUILD=$(SPHINXBUILD) $(MAKE) -C doc doctest
 
-dependencies: dependencies-python$(PYTHON_MAJOR)
+dependencies:
 	sudo apt-get install \
 		$(PYTHON)-pbr \
-		$(PYTHON)-six \
 		$(PYTHON)-fixtures \
 		$(PYTHON)-testtools \
 		$(PYTHON)-requests-mock \
@@ -29,16 +28,10 @@ dependencies: dependencies-python$(PYTHON_MAJOR)
 		$(PYTHON)-coverage \
 		$(PYTHON)-sphinx
 
-dependencies-python2:
-	sudo apt-get install \
-		$(PYTHON)-subprocess32
-
-dependencies-python3):
-
 clean:
 	rm -rf $(SOURCE).egg-info dist
 	rm -f AUTHORS ChangeLog
 	find -type f -name "*.pyc" | xargs rm -f
 	find -type d -name "__pycache_" | xargs rm -rf
 
-.PHONY: all check check-doc dependencies dependencies-python2 dependencies-python3
+.PHONY: all check check-doc dependencies

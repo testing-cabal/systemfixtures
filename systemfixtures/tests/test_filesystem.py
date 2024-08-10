@@ -1,7 +1,6 @@
 import glob
 import os
 import sqlite3
-import six
 import shutil
 
 from testtools import TestCase, skipIf
@@ -15,10 +14,6 @@ from fixtures import TempDir
 
 from ..filesystem import FakeFilesystem
 from ..matchers import HasOwnership
-
-
-if six.PY2:
-    PermissionError = OSError
 
 
 class FakeFilesystemTest(TestCase):
@@ -103,14 +98,12 @@ class FakeFilesystemTest(TestCase):
         self.assertEqual(
             sorted(os.listdir("./doc")), sorted(os.listdir("/foo")))
 
-    if six.PY3:
-
-        def test_listdir_with_fd(self):
-            self.fs.add("/foo")
-            os.makedirs("/foo/bar")
-            fd = os.open("/foo", os.O_RDONLY)
-            self.addCleanup(os.close, fd)
-            self.assertEqual(["bar"], os.listdir(fd))
+    def test_listdir_with_fd(self):
+        self.fs.add("/foo")
+        os.makedirs("/foo/bar")
+        fd = os.open("/foo", os.O_RDONLY)
+        self.addCleanup(os.close, fd)
+        self.assertEqual(["bar"], os.listdir(fd))
 
     def test_readlink_to_real_path(self):
         self.fs.add("/foo")
