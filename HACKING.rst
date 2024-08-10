@@ -21,15 +21,6 @@ Then you can run tests with:
 
    make
 
-The default Python interpreter is `python`,
-to run tests against `python3` interpreter, just
-prepend `PYTHON=python3` to the make commands above, for
-example:
-
-.. code:: shell
-
-   PYTHON=python3 make
-
 Tox
 ---
 
