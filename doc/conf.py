@@ -18,8 +18,6 @@ import os
 import re
 import doctest
 
-import six
-
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -300,16 +298,6 @@ class SixOutputChecker(OutputChecker):
     """
 
     def check_output(self, want, got, optionflags):
-        if six.PY2:
-            if want == "12\n":  # write() doesn't return number of bytes on PY2
-                want = ""
-
-            want = re.sub("PermissionError: (.*)", "OSError: \\1", want)
-            want = re.sub("'0o(.+)'\n", "'0\\1'\n", want)
-            want = re.sub("b'(.*?)'", "'\\1'", want)
-
-            got = re.sub("u'(.*?)'", "'\\1'", got)
-
         return OutputChecker.check_output(self, want, got, optionflags)
 
 

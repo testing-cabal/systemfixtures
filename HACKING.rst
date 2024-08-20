@@ -21,14 +21,6 @@ Then you can run tests with:
 
    make
 
-The default Python version is 2, to run tests against Python 3 just
-prepend `PYTHON=python3` to the make commands above, for
-example:
-
-.. code:: shell
-
-   PYTHON=python3 make
-
 Tox
 ---
 

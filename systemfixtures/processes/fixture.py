@@ -1,4 +1,3 @@
-import six
 import subprocess
 
 from fixtures import FakePopen
@@ -53,11 +52,9 @@ class _FakeProcessWithMissingAPIs(popen.FakeProcess):
     is merged upstream.
     """
 
-    if six.PY3:
-
-        @property
-        def args(self):
-            return self._args["args"]
+    @property
+    def args(self):
+        return self._args["args"]
 
     def poll(self):
         return self.returncode
